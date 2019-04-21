@@ -15,6 +15,7 @@ open Microsoft.EntityFrameworkCore
 open FSharp.Control.Tasks.V2.ContextInsensitive
 open Giraffe
 open Giraffe.GiraffeViewEngine
+open CustomTokenProviders
 
 // ---------------------------------
 // View engine
@@ -225,10 +226,17 @@ let configureServices (services : IServiceCollection) =
 
             // User settings
             options.User.RequireUniqueEmail <- true
+                        
+            let test = typedefof<CustomEmailConfirmationTokenProvider<IdentityUser>>
+            options.Tokens.ProviderMap.Add("CustomEmailConfirmation", 
+                new TokenProviderDescriptor(test))
+            options.Tokens.EmailConfirmationTokenProvider <- "CustomEmailConfirmation"
+
         )
         .AddEntityFrameworkStores<IdentityDbContext<IdentityUser>>()
-        .AddDefaultTokenProviders()
+        //.AddDefaultTokenProviders()
         |> ignore
+    services.AddScoped<CustomEmailConfirmationTokenProvider<IdentityUser>>() |> ignore
 
     // Configure app cookie
     services.ConfigureApplicationCookie(
