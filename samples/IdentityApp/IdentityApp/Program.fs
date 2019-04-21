@@ -227,16 +227,16 @@ let configureServices (services : IServiceCollection) =
             // User settings
             options.User.RequireUniqueEmail <- true
                         
-            let test = typedefof<CustomEmailConfirmationTokenProvider<IdentityUser>>
+            //let test = typedefof<CustomEmailConfirmationTokenProvider<IdentityUser>>
             options.Tokens.ProviderMap.Add("CustomEmailConfirmation", 
-                new TokenProviderDescriptor(test))
+                new TokenProviderDescriptor(typedefof<CustomEmailConfirmationTokenProvider<IdentityUser>>))
             options.Tokens.EmailConfirmationTokenProvider <- "CustomEmailConfirmation"
 
         )
         .AddEntityFrameworkStores<IdentityDbContext<IdentityUser>>()
         //.AddDefaultTokenProviders()
         |> ignore
-    services.AddScoped<CustomEmailConfirmationTokenProvider<IdentityUser>>() |> ignore
+    services.AddTransient<CustomEmailConfirmationTokenProvider<IdentityUser>>() |> ignore
 
     // Configure app cookie
     services.ConfigureApplicationCookie(
