@@ -229,7 +229,7 @@ let configureServices (services : IServiceCollection) =
                         
             //let test = typedefof<CustomEmailConfirmationTokenProvider<IdentityUser>>
             options.Tokens.ProviderMap.Add("CustomEmailConfirmation", 
-                new TokenProviderDescriptor(typedefof<CustomEmailConfirmationTokenProvider<IdentityUser>>))
+                new TokenProviderDescriptor(typeof<CustomEmailConfirmationTokenProvider<IdentityUser>>))
             options.Tokens.EmailConfirmationTokenProvider <- "CustomEmailConfirmation"
 
         )
